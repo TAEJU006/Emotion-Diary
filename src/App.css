@@ -1,3 +1,110 @@
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Yeon+Sung&display=swap");
+
+body {
+  background-color: #f0ffff;
+  display: flex;
+  /*body태그 아래에 있는 요소들을 body 태그를 기준으로 가운데 위치 */
+  justify-content: center;
+  /*display가 flex 속성으로 있을때 세로축을 기준으로 가운데 두겠다 */
+  align-items: center;
+  /*실제 웹 스크린의 100%를 최소 높이로 갖겠다로 선언 */
+  font-family: "Nanum Pen Script";
+  margin: 0px;
+
+  min-height: 100vh;
+}
+/*min-width => 괄호 안에 있는 모든 css 규칙들을 웹 브라우저의 화면이 650px 이상일때만 적용*/
+/* 반응형 웹을 도와주는 css 도구 */
+@media (min-width: 650px) {
+  .App {
+    width: 640px;
+  }
+}
+/* 웹 브라우저의 화면이 650px 이하일 경우에 App이라는 컴포넌트는 90%를 차지하게 하겠음 */
+@media (max-width: 650px) {
+  .App {
+    width: 90vw;
+  }
+}
+
+#root {
+  background-color: white;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+/* 기본적으로 100%를 차지하는 높이를 갖게 됨 */
 .App {
-  padding: 20px;
+  min-height: 100vh;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/*  MyButton */
+
+.MyButton {
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+
+  font-size: 18px;
+
+  /* 글자가 잘려서 두줄이 되지 않게 하는 속성 */
+  white-space: nowrap;
+  font-family: "Nanum Pen Script";
+}
+
+.MyButton_default {
+  background-color: #ececec;
+  color: black;
+}
+
+.MyButton_positive {
+  background-color: #ffccff;
+}
+
+.MyButton_negative {
+  background-color: #ffe4c0;
+}
+
+/* Header */
+
+header {
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  /* flex 속성을 주게 되면 <div> 가로로 바뀐다 */
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e2e2e2;
+}
+
+header > div {
+  display: flex;
+}
+
+/* justify-center:center head 텍스트 중앙에 위치 시킨다 */
+header .head_text {
+  width: 50%;
+
+  font-size: 25px;
+  justify-content: center;
+}
+
+header .head_btn_left {
+  width: 25%;
+  justify-content: start;
+}
+
+header .head_btn_right {
+  width: 25%;
+  justify-content: end;
+}
+
+header button {
+  font-family: "Nanum Pen Script", cursive;
 }
