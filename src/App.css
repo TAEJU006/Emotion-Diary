@@ -108,3 +108,81 @@ header .head_btn_right {
 header button {
   font-family: "Nanum Pen Script", cursive;
 }
+
+/*DiaryList*/
+
+.DiaryList .menu_wrapper {
+  margin-top: 20px;
+  margin-bottom: 30px;
+
+  /* div 요소들이 한줄로 정렬 */
+  display: flex;
+
+  /* 왼쪽 div,  오른쪽 div 간격이 완전히 벌어지게 됨 */
+  justify-content: space-between;
+}
+
+.DiaryList .menu_wrapper .right_col {
+  /* display flex 아래 모든 넓이를 자신이 차지하게 됨 => right-col 남은 영역 전체의 넓이를 갖게 됨 */
+  flex-grow: 1;
+}
+
+.DiaryList .menu_wrapper .right_col button {
+  width: 100%;
+}
+
+.DiaryList .ControlMenu {
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ececec;
+
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+
+  cursor: pointer;
+  font-family: "Nanum pen Script";
+  font-size: 18px;
+}
+
+/* DiaryItem */
+
+.DiaryItem {
+  padding-top: 15px;
+  padding-bottom: 15px;
+
+  border-bottom: 1px solid #e2e2e2;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.DiaryItem .emotion_img_wrapper {
+  cursor: pointer;
+  min-width: 120px;
+  height: 80px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+}
+.DiaryItem .info_wrapper {
+  flex-grow: 1;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.DiaryItem .diary_date {
+  font-weight: bold;
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+
+.DiaryItem .diary_content_preview {
+  font-size: 18px;
+}
+
+.DiaryItem .btn_wrapper {
+  min-width: 70px;
+}
