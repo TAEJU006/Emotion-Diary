@@ -15,7 +15,7 @@ const Edit = () => {
 
   useEffect(() => {
     const titleElement = document.getElementsByTagName("title")[0];
-    titleElement.innerHTML = `감정 일기장 - ${id}번 일기 수정`;
+    titleElement.innerHTML = `feeling diary - ${id}th diary edit`;
   }, []);
 
   //id가 변하거나 DiaryList가 변할때만 꺼내오도록 작성
