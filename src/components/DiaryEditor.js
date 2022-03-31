@@ -1,44 +1,18 @@
+import { useState, useRef, useContext, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContext, useRef, useState } from "react";
 import { DiaryDispatchContext } from "./../App.js";
 
 import MyHeader from "./MyHeader";
 import MyButton from "./MyButton";
 import EmotionItem from "./EmotionItem";
 
-const emotionList = [
-  {
-    emotion_id: 1,
-    emotion_img: process.env.PUBLIC_URL + `/assets/emotion1.png`,
-    emotion_descript: "best",
-  },
-  {
-    emotion_id: 2,
-    emotion_img: process.env.PUBLIC_URL + `/assets/emotion2.png`,
-    emotion_descript: "good",
-  },
-  {
-    emotion_id: 3,
-    emotion_img: process.env.PUBLIC_URL + `/assets/emotion3.png`,
-    emotion_descript: "not bad",
-  },
-  {
-    emotion_id: 4,
-    emotion_img: process.env.PUBLIC_URL + `/assets/emotion4.png`,
-    emotion_descript: "bad",
-  },
-  {
-    emotion_id: 5,
-    emotion_img: process.env.PUBLIC_URL + `/assets/emotion5.png`,
-    emotion_descript: "worst",
-  },
-];
+import { getStringDate } from "../util/date.js";
+import { emotionList } from "../util/emotion.js";
 
-const getStringDate = (date) => {
-  return date.toISOString().slice(0, 10);
-};
+const env = process.env;
+env.PUBLIC_URL = env.PUBLIC_URL || "";
 
-const DiaryEditor = () => {
+const DiaryEditor = ({ isEdit, originData }) => {
   const contentRef = useRef();
   // 오늘의 일기를 state에 mapping 하기 위한 state
   const [content, setContent] = useState("");
@@ -46,12 +20,11 @@ const DiaryEditor = () => {
   const [emotion, setEmotion] = useState(3);
   const [date, setDate] = useState(getStringDate(new Date()));
 
-  const { onCreate } = useContext(DiaryDispatchContext);
+  const { onCreate, onEdit, onRemove } = useContext(DiaryDispatchContext);
   // emotion을 클릭하면 수행할 함수
-  const handleClickEmote = (emotion) => {
+  const handleClickEmote = useCallback((emotion) => {
     setEmotion(emotion);
-  };
-
+  }, []);
   const navigate = useNavigate();
 
   //작성완료 버튼의 기능
@@ -60,33 +33,71 @@ const DiaryEditor = () => {
       contentRef.current.focus();
       return;
     }
-    //context length가 적절한 길이가 되었을때 onCreate 함수를 호출
-    onCreate(date, content, emotion);
+
+    if (
+      window.confirm(
+        isEdit ? "일기를 수정하시겠습니까?" : "새로운 일기를 작성하시겠습니까?"
+      )
+    ) {
+      if (!isEdit) {
+        onCreate(date, content, emotion);
+      } else {
+        onEdit(originData.id, date, content, emotion);
+      }
+    }
+    //replace:true 뒤로 갈 수 없도록
     navigate("/", { replace: true });
   };
+
+  const handleRemove = () => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      onRemove(originData.id);
+      navigate("/", { replace: true });
+    }
+  };
+
+  // 원래 있던 데이터 가져옴
+  useEffect(() => {
+    if (isEdit) {
+      setDate(getStringDate(new Date(parseInt(originData.date))));
+      setEmotion(originData.emotion);
+      setContent(originData.content);
+    }
+  }, [isEdit, originData]);
 
   return (
     <div className="DiaryEditor">
       <MyHeader
-        headText={"write a diary"}
-        leftChild={<MyButton text={"< back"} onClick={() => navigate(-1)} />}
+        headText={isEdit ? "일기 수정하기" : "새 일기쓰기"}
+        leftChild={
+          <MyButton text={"< 뒤로가기"} onClick={() => navigate(-1)} />
+        }
+        rightChild={
+          isEdit && (
+            <MyButton
+              text={"삭제하기"}
+              type={"negative"}
+              onClick={handleRemove}
+            />
+          )
+        }
       />
       <div>
         {/* 역할은  div와 동일한데 이름만 다르다 */}
         <section>
-          <h4>Date</h4>
+          <h4>오늘은 언제인가요?</h4>
           <div className="input_box">
             {/* 날자 선택이 가능한 html 태그 */}
             <input
+              className="input_date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="input_date"
               type="date"
             />
           </div>
         </section>
         <section>
-          <h4>Feeling</h4>
+          <h4>오늘의 감정</h4>
           <div className="input_box emotion_list_wrapper">
             {emotionList.map((it) => (
               <EmotionItem
@@ -101,18 +112,24 @@ const DiaryEditor = () => {
           </div>
         </section>
         <section>
+          <h4>오늘의 일기</h4>
           <div className="input_box text_wrapper">
             <textarea
-              placeholder="How was your day?"
+              placeholder="오늘은 어땠나요"
               ref={contentRef}
               value={content}
               onChange={(e) => setContent(e.target.value)}
-            ></textarea>
+            />
           </div>
         </section>
         <section>
-          <div className="control-box">
-            <MyButton text={"save"} type={"positive"} onClick={handleSubmit} />
+          <div className="control_box">
+            <MyButton text={"취소하기"} onClick={() => navigate(-1)} />
+            <MyButton
+              text={"작성완료"}
+              type={"positive"}
+              onClick={handleSubmit}
+            />
           </div>
         </section>
       </div>

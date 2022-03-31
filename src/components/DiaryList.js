@@ -1,20 +1,22 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DiaryItem from "./DiaryItem";
 import MyButton from "./MyButton";
+import DiaryItem from "./DiaryItem";
 
 const sortOptionList = [
-  { value: "latest", name: "latest" },
-  { value: "oldest", name: "oldest" },
+  { value: "latest", name: "최신순" },
+  { value: "oldest", name: "오래된 순" },
 ];
 
 const filterOptionList = [
-  { value: "all", name: "all" },
-  { value: "good", name: ":)" },
-  { vlaue: "bad", name: ":(" },
+  { value: "all", name: "전부다" },
+  { value: "good", name: "좋은 감정만" },
+  { value: "bad", name: "안좋은 감정만" },
 ];
 
-const ControlMenu = ({ value, onChange, optionList }) => {
+// 컴포넌트 하나를 인자로 전달 받아서 강화된 컴포넌트를 돌려주는애
+// 전달받는prop이 값이 바뀌지 않으면 rendering이 일어나지 않도록 memoization
+const ControlMenu = React.memo(({ value, onChange, optionList }) => {
   return (
     <select
       className="ControlMenu"
@@ -28,12 +30,11 @@ const ControlMenu = ({ value, onChange, optionList }) => {
       ))}
     </select>
   );
-};
+});
 
 const DiaryList = ({ diaryList }) => {
   const navigate = useNavigate();
   const [sortType, setSortType] = useState("latest");
-
   const [filter, setFilter] = useState("all");
 
   const getProcessedDiaryList = () => {
@@ -54,7 +55,6 @@ const DiaryList = ({ diaryList }) => {
     };
 
     const copyList = JSON.parse(JSON.stringify(diaryList));
-
     const filteredList =
       filter === "all" ? copyList : copyList.filter((it) => filterCallBack(it));
 
@@ -80,7 +80,7 @@ const DiaryList = ({ diaryList }) => {
         <div className="right_col">
           <MyButton
             type={"positive"}
-            text={"write a diary"}
+            text={"새 일기쓰기"}
             onClick={() => navigate("/new")}
           />
         </div>

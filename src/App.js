@@ -1,4 +1,4 @@
-import React, { useReducer, useRef } from "react";
+import React, { useEffect, useReducer, useRef } from "react";
 
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -24,11 +24,7 @@ const reducer = (state, action) => {
     }
     case "EDIT": {
       newState = state.map((it) =>
-        it.id === action.data.id
-          ? {
-              ...action.data,
-            }
-          : it
+        it.id === action.data.id ? { ...action.data } : it
       );
       break;
     }
@@ -36,55 +32,33 @@ const reducer = (state, action) => {
       return state;
   }
 
+  localStorage.setItem("diary", JSON.stringify(newState));
   return newState;
 };
 
 export const DiaryStateContext = React.createContext();
 export const DiaryDispatchContext = React.createContext();
 
-const dummyData = [
-  {
-    id: 1,
-    emotion: 1,
-    content: "오늘의일기 1번",
-
-    date: 1648633885549,
-  },
-  {
-    id: 2,
-    emotion: 2,
-    content: "오늘의일기 2번",
-
-    date: 1648633885550,
-  },
-  {
-    id: 3,
-    emotion: 3,
-    content: "오늘의일기 2번",
-
-    date: 1648633885551,
-  },
-  {
-    id: 4,
-    emotion: 4,
-    content: "오늘의일기 4번",
-
-    date: 1648633885552,
-  },
-  {
-    id: 5,
-    emotion: 5,
-    content: "오늘의일기 5번",
-
-    date: 1648633885553,
-  },
-];
-
 function App() {
-  const [data, dispatch] = useReducer(reducer, dummyData);
+  const [data, dispatch] = useReducer(reducer, []);
 
-  console.log(new Date().getTime());
+  //컴포넌트가 mount 되었을때 localstorage에 있는 값을 꺼내서 Data state의 기초값으로 사용
+  useEffect(() => {
+    const localData = localStorage.getItem("diary");
+    // if문으로 truhy falsy 활용 있을때만 내부 로직 수행
+    if (localData) {
+      // 내림차순으로 아이디 정렬
+      const diaryList = JSON.parse(localData).sort(
+        (a, b) => parseInt(b.id) - parseInt(a.id)
+      );
+      dataId.current = parseInt(diaryList[0].id) + 1;
 
+      //diaryList를  App 컴포넌트가 가지는 data 상태의 초기값으로 설정
+      dispatch({ type: "INIT", data: diaryList });
+    }
+  }, []);
+
+  //encountered two key 에러 => 겹치는 key 발생했는지 확인
   const dataId = useRef(0);
 
   const onCreate = (date, content, emotion) => {
@@ -119,13 +93,13 @@ function App() {
 
   return (
     <DiaryStateContext.Provider value={data}>
-      <DiaryDispatchContext.Provider value={(onCreate, onRemove, onEdit)}>
+      <DiaryDispatchContext.Provider value={{ onCreate, onRemove, onEdit }}>
         <BrowserRouter>
           <div className="App">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/new" element={<New />} />
-              <Route path="/edit" element={<Edit />} />
+              <Route path="/edit/:id" element={<Edit />} />
               <Route path="/diary/:id" element={<Diary />} />
             </Routes>
           </div>
