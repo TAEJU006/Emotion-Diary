@@ -186,3 +186,105 @@ header button {
 .DiaryItem .btn_wrapper {
   min-width: 70px;
 }
+
+/* DiaryEditor */
+
+.DiaryEditor {
+}
+
+.DiaryEditor section {
+  margin-bottom: 40px;
+}
+
+.DiaryEditor h4 {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.DiaryEditor .input_date {
+  border: none;
+  border-radius: 5px;
+  background-color: #ececec;
+
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+
+  cursor: pointer;
+  font-family: "Nanum Pen Script", cursive;
+
+  font-size: 20px;
+}
+
+.DiaryEditor .emotion_list_wrapper {
+  /* 격자를 만드는 속성 */
+  display: grid;
+  /* 다섯개의 열을 나열하는데 아이템의 사이즈는 자동으로 해라 */
+  grid-template-columns: repeat(5, auto);
+  /* 아이템과 아이템 사이에 gap */
+  gap: 2%;
+}
+
+.DiaryEditor textarea {
+  font-family: "Nanum pen script";
+  font-size: 20px;
+
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 200px;
+  /* 가로론 늘린순 없게 해준다 */
+  resize: vertical;
+
+  border: none;
+  border-radius: 5px;
+  background-color: #ececec;
+
+  padding: 20px;
+}
+
+/* EMOTION ITEM */
+
+.EmotionItem {
+  cursor: pointer;
+
+  border-radius: 5px;
+  padding-bottom: 20px;
+  padding-top: 20px;
+
+  display: flex;
+  /* emotion 상태 문구가 원래 옆에 있어야 하는데 column 사용해서 아래로 내려줌 */
+  flex-direction: column;
+  /* column을 중심으로 세로의 중앙을 찾아줌 */
+  justify-content: center;
+  align-items: center;
+}
+
+.EmotionItem img {
+  width: 50%;
+  margin-bottom: 10px;
+}
+
+.EmotionItem span {
+  font-size: 18px;
+}
+.EmotionItem_on_1 {
+  background-color: #64c964;
+  color: white;
+}
+.EmotionItem_on_2 {
+  background-color: #9dd772;
+  color: white;
+}
+.EmotionItem_on_3 {
+  background-color: #fdce17;
+  color: white;
+}
+.EmotionItem_on_4 {
+  background-color: #fd8446;
+  color: white;
+}
+.EmotionItem_on_5 {
+  background-color: #fd565f;
+  color: white;
+}
